@@ -6,6 +6,10 @@ import cap_multi_input_nlpaug as modelling
 import pickle
 import random
 import numpy as np
+
+import nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
 #from streamlit_chat import message as st_message
 
 # from transformers import BlenderbotTokenizer
