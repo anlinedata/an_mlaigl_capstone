@@ -4,3 +4,4 @@ sklearn
 scipy
 nltk
 wordcloud
+click==8
