@@ -7,6 +7,11 @@ import pickle
 import random
 import numpy as np
 
+import streamlit as st
+import torch
+import transformers
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
 import nltk
 nltk.download('all')
 #from streamlit_chat import message as st_message
@@ -67,85 +72,47 @@ with body:
         st.button('Process and Download Trained Model', on_click=processModel) 
     with col3:
         st.markdown('**NLP Industrial Safety Chatbot**') 
-        # def get_models():
-        #     # it may be necessary for other frameworks to cache the model
-        #     # seems pytorch keeps an internal state of the conversation
-        #     model_name = "facebook/blenderbot-400M-distill"
-        #     tokenizer = BlenderbotTokenizer.from_pretrained(model_name)
-        #     model = BlenderbotForConditionalGeneration.from_pretrained(model_name)
-        #     return tokenizer, model
+        st.button('Start Industrial Safety NLP Chatbot')
 
-        if "history" not in st.session_state:
-            st.session_state.history = []
+        with col3:
 
-        def generate_answer():
-            # tokenizer, model = get_models()
-            user_message = st.session_state.input_text
-            # inputs = tokenizer(st.session_state.input_text, return_tensors="pt")
-            # result = model.generate(**inputs)
+                @st.cache(hash_funcs={transformers.models.gpt2.tokenization_gpt2_fast.GPT2TokenizerFast: hash}, suppress_st_warning=True)
+                def load_data():    
+                    tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
+                    model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+                    return tokenizer, model
 
-            # message_bot = tokenizer.decode(
-            #     result[0], skip_special_tokens=True   ) 
-            message_bot = "TEST"
-          
+                tokenizer, model = load_data()
 
-            st.session_state.history.append({"message": user_message, "is_user": True})
-            st.session_state.history.append({"message": message_bot, "is_user": False})
+                st.markdown('Welcome to Chatbot Service! Let me know how can I help you')
+                input = st.text_input('User:')
 
-        def get_bot_response(message):
-            message = message.lower()
-            response = "TEST"
-            # results = model.predict([bag_of_words(message,words)])[0]
-            # result_index = np.argmax(results)
-            # tag = labels[result_index]
-            # for tg in data['intents']:
-            #     if tg['tag'] == tag:
-            #     responses = tg['responses']
-            # response = random.choice(responses)
-            return str(response)
+                if 'count' not in st.session_state or st.session_state.count == 6:
+                    st.session_state.count = 0 
+                    st.session_state.chat_history_ids = None
+                    st.session_state.old_response = ''
+                else:
+                    st.session_state.count += 1
 
-        #st.text_input("Talk to the bot", key="input_text", on_change=generate_answer)
-        def get_text():
-            input_text = st.text_input("You: ","So, what's in your mind")
-            return input_text
+                new_user_input_ids = tokenizer.encode(input + tokenizer.eos_token, return_tensors='pt')
 
-        def generate_answer1():
-            user_message = st.session_state.input_text
-            if user_message=="Bye" or user_message=='bye':
-                    st.markdown('ChatBot: Bye')
-                    #break
-            else:
-                    st.markdown('ChatBot: AAA')
-                    response=get_bot_response(user_message)
-                    st.markdown('ChatBot: BBB')
-                    st.markdown('ChatBot: AAA')
-                    st.text_area('ChatBot: BBB')
+                bot_input_ids = torch.cat([st.session_state.chat_history_ids, new_user_input_ids], dim=-1) if st.session_state.count > 1 else new_user_input_ids
 
-        def startchatbot():
-            #st.text_input("Talk to the bot", key="input_text", on_change=generate_answer)
+                st.session_state.chat_history_ids = model.generate(bot_input_ids, max_length=5000, pad_token_id=tokenizer.eos_token_id)
 
-            #name = input('Enter Your Name: ')
-            st.text_input('Enter Your Name:', key="input_text", on_change=generate_answer1)
-            st.markdown('Welcome to Chatbot Service! Let me know how can I help you')
-            # response = ""
+                response = tokenizer.decode(st.session_state.chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
 
-            # if True:
+                if st.session_state.old_response == response:
+                    bot_input_ids = new_user_input_ids
+ 
+                st.session_state.chat_history_ids = model.generate(bot_input_ids, max_length=5000, pad_token_id=tokenizer.eos_token_id)
+                response = tokenizer.decode(st.session_state.chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
 
-            #     request = st.text_input(':')
+                st.write(f'Chatbot: {response}')
 
-            #     if request=="Bye" or request=='bye':
-            #         st.markdown('ChatBot: Bye')
-            #         #break
-            #     else:
-            #         st.markdown('ChatBot: AAA')
-            #         response=get_bot_response(request)
-            #         st.markdown('ChatBot: BBB')
-            #         st.markdown('ChatBot: AAA')
-            #         st.text_area('ChatBot: BBB')
-        # for chat in st.session_state.history:
-        #     st_message(**chat)  # unpacking
+                st.session_state.old_response = response
 
-        st.button('Start Industrial Safety NLP Chatbot', on_click= startchatbot)
+        
 
         
 
