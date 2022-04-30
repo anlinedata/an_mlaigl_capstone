@@ -3,6 +3,10 @@ import base64
 import os
 import capstone_project_grp13_eda_dataprep as eda
 
+data_path = r''
+file_name = 'IHMStefanini_industrial_safety_and_health_database_with_accidents_description.csv'
+output_file_name = 'capproj1.csv'
+
 st.set_page_config('Home') 
 header = st.container()
 body = st.container()
@@ -24,7 +28,7 @@ with body:
 
         def processEDA():
             data = eda.processEDAData()
-            return data.to_csv().encode('utf-8')
+            return data.to_csv()
         
         dataprep = processEDA()
 
