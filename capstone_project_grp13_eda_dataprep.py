@@ -34,7 +34,7 @@ def processEDAData():
     import re
     from PIL import Image
     from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-
+   
     data_path = r''
     file_name = 'IHMStefanini_industrial_safety_and_health_database_with_accidents_description.csv'
     output_file_name = 'capproj1.csv'
@@ -277,4 +277,5 @@ def processEDAData():
     accident_df_raw_data = accident_df_raw_data.drop(columns='Year', axis=1)
     accident_df_raw_data.to_csv(data_path + output_file_name)
     accident_df_raw_data.head()
+    return accident_df_raw_data
 

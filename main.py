@@ -23,18 +23,23 @@ with body:
         st.markdown('**EDA and Data Pre Processing**') 
 
         def processEDA():
-            eda.processEDAData()
+            data = eda.processEDAData()
+            return data.to_csv().encode('utf-8')
+        
+        dataprep = processEDA()
 
         with open('Capstone_Project_Grp13_EDA_DataPrep.pdf', 'rb') as pdf_file:
             PDFbyte = pdf_file.read()
             st.download_button(label='Download EDA Report and Data Pre Processing', data = PDFbyte, file_name='Capstone_Project_Grp13_EDA_DataPrep.pdf', mime='application/octet-stream')
-            st.download_button(label='Process and Download EDA Report and Data Pre Processing' , data = PDFbyte, file_name='Capstone_Project_Grp13_EDA_DataPrep.pdf',
-                on_click= processEDA, mime='application/octet-stream')
+
+        # st.button(label='Process and Download EDA Report and Data Pre Processing' , on_click= processEDA)
+
+        st.download_button(label='Download Data Pre Processing File' , data = dataprep, file_name='Capstone_Project_Grp13_EDA_DataPrep.csv', mime="text/csv")
+
     with col2:
         st.button('NLP Modelling and Review') 
     with col3:
         st.button('Industrial Safety NLP Chatbot')
-    
-    
+        
 
 
