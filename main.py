@@ -55,7 +55,7 @@ with body:
 
         # st.button(label='Process and Download EDA Report and Data Pre Processing' , on_click= processEDA)
 
-        st.download_button(label='Download Data Pre Processing File' , data = dataprep, file_name='Capstone_Project_Grp13_EDA_DataPrep.csv', mime="text/csv")
+        st.download_button(label='Process and Download Data Pre Processing File' , data = dataprep, file_name='Capstone_Project_Grp13_EDA_DataPrep.csv', mime="text/csv")
 
     with col2:
 
@@ -68,10 +68,10 @@ with body:
                 href = f'<a href="data:file/output_model;base64,{b64}" download="nlpmodel.pkl">Process and Download Trained Model .pkl File</a> (save as .pkl)'
                 st.markdown(href, unsafe_allow_html=True)
         
-        st.button('Process and Download Trained Model', on_click=processModel) 
+        st.button('Train and Download Model', on_click=processModel) 
     with col3:
         st.markdown('**NLP Industrial Safety Chatbot**') 
-        st.button('Start Industrial Safety NLP Chatbot')
+        st.button('Industrial Safety NLP Chatbot')
 
         with col3:
 
