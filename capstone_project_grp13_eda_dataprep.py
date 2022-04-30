@@ -275,7 +275,7 @@ def processEDAData():
     accident_df_raw_data = accident_df_raw_data.drop(columns='Date', axis=1)
     accident_df_raw_data = accident_df_raw_data.drop(columns='Month', axis=1)
     accident_df_raw_data = accident_df_raw_data.drop(columns='Year', axis=1)
-    accident_df_raw_data.to_csv(data_path + output_file_name)
+    #accident_df_raw_data.to_csv(data_path + output_file_name)
     accident_df_raw_data.head()
     return accident_df_raw_data
 
