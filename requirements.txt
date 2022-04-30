@@ -8,4 +8,5 @@ click==8
 keras.utils
 tensorflow
 nlpaug
-nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
