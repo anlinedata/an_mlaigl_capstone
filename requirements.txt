@@ -8,3 +8,4 @@ click==8
 keras.utils
 tensorflow
 nlpaug
+nltk
