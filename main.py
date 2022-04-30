@@ -8,7 +8,7 @@ import random
 import numpy as np
 
 import nltk
-nltk.download()
+nltk.download('all')
 #from streamlit_chat import message as st_message
 
 # from transformers import BlenderbotTokenizer
