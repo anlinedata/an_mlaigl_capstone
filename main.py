@@ -8,8 +8,7 @@ import random
 import numpy as np
 
 import nltk
-nltk.download('averaged_perceptron_tagger')
-nltk.download('wordnet')
+nltk.download()
 #from streamlit_chat import message as st_message
 
 # from transformers import BlenderbotTokenizer
