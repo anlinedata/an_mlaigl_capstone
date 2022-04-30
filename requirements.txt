@@ -5,3 +5,4 @@ scipy
 nltk
 wordcloud
 click==8
+keras.utils
