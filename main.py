@@ -1,5 +1,7 @@
 import streamlit as st
 import base64
+import os
+import capstone_project_grp13_eda_dataprep as eda
 
 st.set_page_config('Home') 
 header = st.container()
@@ -18,11 +20,16 @@ with body:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.markdown('**EDA and Data Pre Processing**')          
+        st.markdown('**EDA and Data Pre Processing**') 
+
+        def processEDA():
+            eda.processEDAData()
+
         with open('Capstone_Project_Grp13_EDA_DataPrep.pdf', 'rb') as pdf_file:
             PDFbyte = pdf_file.read()
             st.download_button(label='Download EDA Report and Data Pre Processing', data = PDFbyte, file_name='Capstone_Project_Grp13_EDA_DataPrep.pdf', mime='application/octet-stream')
-        st.button('Process and Download EDA Report and Data Pre Processing')
+            st.download_button(label='Process and Download EDA Report and Data Pre Processing' , data = PDFbyte, file_name='Capstone_Project_Grp13_EDA_DataPrep.pdf',
+                on_click= processEDA, mime='application/octet-stream')
     with col2:
         st.button('NLP Modelling and Review') 
     with col3:
