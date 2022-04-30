@@ -61,7 +61,7 @@ with body:
                 model = modelling.processModel()
                 output_model = pickle.dumps(model)
                 b64 = base64.b64encode(output_model).decode()
-                href = f'<a href="data:file/output_model;base64,{b64}">Process and Download Trained Model .pkl File</a> (save as .pkl)'
+                href = f'<a href="data:output_model;base64,{b64}">Process and Download Trained Model .pkl File</a> (save as .pkl)'
                 st.markdown(href, unsafe_allow_html=True)
         
         st.button('Process and Download Trained Model', on_click=processModel) 
