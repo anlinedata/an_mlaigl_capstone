@@ -10,5 +10,4 @@ tensorflow
 nlpaug
 torch
 transformers
-pathlib
 keras.models
