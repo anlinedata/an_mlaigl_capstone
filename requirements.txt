@@ -1,7 +1,15 @@
 matplotlib
+matplotlib
 seaborn
 sklearn
 scipy
 nltk
-PIL
 wordcloud
+click==8
+keras.utils
+tensorflow
+nlpaug
+torch
+transformers
+pathlib
+keras.models
