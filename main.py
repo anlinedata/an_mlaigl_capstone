@@ -84,7 +84,8 @@ with body:
             with col2:
                 model = modelling.processModel()
                 model.save(data_path + model_name)
-                directory_path = Path(data_path + model_name)
+                #directory_path = Path(data_path + model_name)
+                directory_path = (data_path + model_name)
                 file_paths = get_all_file_paths(directory_path)
 
                 zip_buffer = io.BytesIO()
