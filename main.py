@@ -11,8 +11,16 @@ import torch
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from pathlib import Path
+from zipfile import ZipFile
+import io
+from keras.models import load_model
+
 import nltk
-nltk.download('all')
+#nltk.download('all')
+
+data_path = r''
+model_name = 'nlpmodel'
 #from streamlit_chat import message as st_message
 
 # from transformers import BlenderbotTokenizer
@@ -60,13 +68,37 @@ with body:
     with col2:
 
         st.markdown('**NLP Modelling**') 
+
+        def get_all_file_paths(directory_path):
+            file_paths = []
+
+            # crawling through directory and subdirectories
+            for root, directories, files in os.walk(directory_path):
+                for filename in files:
+                    # join the two strings in order to form the full filepath.
+                    filepath = os.path.join(root, filename)
+                    file_paths.append(filepath)
+            return file_paths
+
         def processModel():
             with col2:
                 model = modelling.processModel()
-                output_model = pickle.dumps(model)
-                b64 = base64.b64encode(output_model).decode()
-                href = f'<a href="data:file/output_model;base64,{b64}" download="nlpmodel.pkl">Process and Download Trained Model .pkl File</a> (save as .pkl)'
-                st.markdown(href, unsafe_allow_html=True)
+                model.save(data_path + model_name)
+                directory_path = Path(data_path + model_name)
+                file_paths = get_all_file_paths(directory_path)
+
+                zip_buffer = io.BytesIO()
+                with ZipFile(zip_buffer, 'w') as zip_file:
+                    # writing each file one by one
+                    for file in file_paths:
+                        zip_file.write(file)
+
+                
+                #output_model = pickle.dumps(model)
+                #b64 = base64.b64encode(output_model).decode()
+                #href = f'<a href="data:file/output_model;base64,{b64}" download="nlpmodel.pkl">Process and Download Trained Model .pkl File</a> (save as .pkl)'
+                #st.markdown(href, unsafe_allow_html=True)
+                st.download_button("Download Trained Model .zip File", zip_buffer, "nlpmodel.zip")
         
         st.button('Train and Download Model', on_click=processModel) 
     with col3:
@@ -77,14 +109,20 @@ with body:
 
                 @st.cache(hash_funcs={transformers.models.gpt2.tokenization_gpt2_fast.GPT2TokenizerFast: hash}, suppress_st_warning=True)
                 def load_data():    
+                    #model_file = open(data_path + model_name, 'rb')
+                    #loaded_model = base64.b64decode(pickle.load(open(data_path + model_name, 'rb')))
+                    #loaded_model = pickle.loads(base64.b64decode(model_file, "base64"))
+                    #loaded_model = load_model(data_path + model_name)
                     tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
                     model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+                    #model = loaded_model
                     return tokenizer, model
 
                 tokenizer, model = load_data()
 
                 st.markdown('Welcome to Chatbot Service! Let me know how can I help you')
                 input = st.text_input('User:')
+                inputadd = st.text_input('Other Details:')
 
                 if 'count' not in st.session_state or st.session_state.count == 6:
                     st.session_state.count = 0 

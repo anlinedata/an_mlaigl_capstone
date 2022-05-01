@@ -41,6 +41,7 @@ def processModel():
     import nltk
     nltk.download('averaged_perceptron_tagger')
     nltk.download('wordnet')
+    nltk.download('omw-1.4') 
 
     data_path = r''
 

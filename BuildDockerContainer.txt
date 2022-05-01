@@ -1,0 +1,5 @@
+1. Go to folder docker via cmd line
+2. Run cmd: docker build -t nlpchatbot .
+3. Step 2 creates a Docker image
+4. List all Docker images cmd: docker image ls
+5. Run the Docker image cmd: docker run -dp 8501:8501 nlpchatbot
