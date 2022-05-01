@@ -1,0 +1,15 @@
+streamlit
+matplotlib
+seaborn
+sklearn
+scipy
+nltk
+wordcloud
+click==8
+keras.utils
+tensorflow
+nlpaug
+torch
+transformers
+pathlib
+keras.models
