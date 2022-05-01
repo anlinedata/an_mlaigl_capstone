@@ -343,16 +343,20 @@ def processModel():
 
     def create_prediction(index):
         desc_pred = np.asarray([X_desc_test[index]])
+        test = np.asarray([X_other_test[index]])
         other_pred = np.asarray([X_other_test[index]]).astype(np.float32)
 
         pred = model.predict([desc_pred, other_pred])
+        print('desc_pred', desc_pred)
+        print('other_pred', other_pred)
+        print('test', test)
         print('index', index)
         print('predicted accident level',np.argmax(pred[0]))
         print('predicted potential accident level',np.argmax(pred[1]))
         print('actual accident level' ,np.argmax(Y_test_accident_level[index]))
         print('actual potential accident level' ,np.argmax(Y_test_potential_accident_level[index]))
 
-    #create_prediction(10)
+    create_prediction(10)
 
     #create_prediction(20)
 
