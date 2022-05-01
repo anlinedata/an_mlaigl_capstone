@@ -11,3 +11,4 @@ nlpaug
 torch
 transformers
 keras.models
+pip3 pathlib
