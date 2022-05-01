@@ -11,8 +11,8 @@ import torch
 import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from zipfile import ZipFile
-import io
+# from zipfile import ZipFile
+# import io
 from keras.models import load_model
 
 import nltk
@@ -74,32 +74,32 @@ with body:
 
         st.markdown('**NLP Modelling**') 
 
-        def get_all_file_paths(directory_path):
-            file_paths = []
+        # def get_all_file_paths(directory_path):
+        #     file_paths = []
 
-            # crawling through directory and subdirectories
-            for root, directories, files in os.walk(directory_path):
-                for filename in files:
-                    # join the two strings in order to form the full filepath.
-                    filepath = os.path.join(root, filename)
-                    file_paths.append(filepath)
-            return file_paths
+        #     # crawling through directory and subdirectories
+        #     for root, directories, files in os.walk(directory_path):
+        #         for filename in files:
+        #             # join the two strings in order to form the full filepath.
+        #             filepath = os.path.join(root, filename)
+        #             file_paths.append(filepath)
+        #     return file_paths
 
         def processModel():
             with col2:
-                model = modelling.processModel()
-                model.save(data_path + model_name)
-                #directory_path = Path(data_path + model_name)
-                directory_path = (data_path + model_name)
-                file_paths = get_all_file_paths(directory_path)
+                # model = modelling.processModel()
+                # model.save(data_path + model_name)
+                # #directory_path = Path(data_path + model_name)
+                # directory_path = (data_path + model_name)
+                # file_paths = get_all_file_paths(directory_path)
 
-                zip_buffer = io.BytesIO()
-                with ZipFile(zip_buffer, 'w') as zip_file:
-                    # writing each file one by one
-                    for file in file_paths:
-                        zip_file.write(file)
+                # zip_buffer = io.BytesIO()
+                # with ZipFile(zip_buffer, 'w') as zip_file:
+                #     # writing each file one by one
+                #     for file in file_paths:
+                #         zip_file.write(file)
 
-                
+                zip_buffer = model_name
                 #output_model = pickle.dumps(model)
                 #b64 = base64.b64encode(output_model).decode()
                 #href = f'<a href="data:file/output_model;base64,{b64}" download="nlpmodel.pkl">Process and Download Trained Model .pkl File</a> (save as .pkl)'
