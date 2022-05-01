@@ -19,6 +19,12 @@ from keras.models import load_model
 import nltk
 #nltk.download('all')
 
+from string import punctuation
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import re  # regular expression
+
+
 data_path = r''
 model_name = 'nlpmodel'
 #from streamlit_chat import message as st_message
@@ -108,47 +114,110 @@ with body:
 
         with col3:
 
-                @st.cache(hash_funcs={transformers.models.gpt2.tokenization_gpt2_fast.GPT2TokenizerFast: hash}, suppress_st_warning=True)
-                def load_data():    
-                    #model_file = open(data_path + model_name, 'rb')
-                    #loaded_model = base64.b64decode(pickle.load(open(data_path + model_name, 'rb')))
-                    #loaded_model = pickle.loads(base64.b64decode(model_file, "base64"))
-                    #loaded_model = load_model(data_path + model_name)
-                    tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
-                    model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
-                    #model = loaded_model
-                    return tokenizer, model
-
-                tokenizer, model = load_data()
-
+                #form = st.form(key="my_form")
                 st.markdown('Welcome to Chatbot Service! Let me know how can I help you')
                 input = st.text_input('User:')
                 inputadd = st.text_input('Other Details:')
 
-                if 'count' not in st.session_state or st.session_state.count == 6:
-                    st.session_state.count = 0 
-                    st.session_state.chat_history_ids = None
-                    st.session_state.old_response = ''
-                else:
-                    st.session_state.count += 1
+                stop_words = stopwords.words("english")
+                @st.cache
+                def text_cleaning(text, remove_stop_words=True, lemmatize_words=True):
+                    # Clean the text, with the option to remove stop_words and to lemmatize word
+                
+                    # Clean the text
+                    text = re.sub(r"[^A-Za-z0-9]", " ", text)
+                    text = re.sub(r"\'s", " ", text)
+                    text = re.sub(r"http\S+", " link ", text)
+                    text = re.sub(r"\b\d+(?:\.\d+)?\s+", "", text)  # remove numbers
+                
+                    # Remove punctuation from text
+                    text = "".join([c for c in text if c not in punctuation])
+                
+                    # Optionally, remove stop words
+                    if remove_stop_words:
+                        text = text.split()
+                        text = [w for w in text if not w in stop_words]
+                        text = " ".join(text)
+                
+                    # Optionally, shorten words to their stems
+                    if lemmatize_words:
+                        text = text.split()
+                        lemmatizer = WordNetLemmatizer()
+                        lemmatized_words = [lemmatizer.lemmatize(word) for word in text]
+                        text = " ".join(lemmatized_words)
+                
+                    # Return a list of words
+                    return text
 
-                new_user_input_ids = tokenizer.encode(input + tokenizer.eos_token, return_tensors='pt')
-
-                bot_input_ids = torch.cat([st.session_state.chat_history_ids, new_user_input_ids], dim=-1) if st.session_state.count > 1 else new_user_input_ids
-
-                st.session_state.chat_history_ids = model.generate(bot_input_ids, max_length=5000, pad_token_id=tokenizer.eos_token_id)
-
-                response = tokenizer.decode(st.session_state.chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
-
-                if st.session_state.old_response == response:
-                    bot_input_ids = new_user_input_ids
+                def make_prediction(review, other):
  
-                st.session_state.chat_history_ids = model.generate(bot_input_ids, max_length=5000, pad_token_id=tokenizer.eos_token_id)
-                response = tokenizer.decode(st.session_state.chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
+                    # clearn the data
+                    clean_review = text_cleaning(review)
+                
+                    # load the model and make prediction
+                    model = load_model(data_path + model_name)
+                
+                    # make prection
+                    other = [ 0,  3,  1,  1,  1, 16]
+                    result = model.predict([clean_review, other])
+                
+                    # check probabilities
+                    pred = np.argmax(result[0])
+                    potpred = np.argmax(result[1])
+                    return pred, potpred
 
-                st.write(f'Chatbot: {response}')
+                #submit = st.button(label="Make Prediction")
 
-                st.session_state.old_response = response
+                if input and inputadd:
+                    # pred, potpred = make_prediction(input, 0)
+                    # st.write(f'Chatbot: {pred}')
+                    pred = 'TEST2'
+                    potpred = 'TEST3'
+                    st.write(f'Chatbot: Predicted Accident Level - {pred} | Predicted Potential Accident Level - {potpred}')
+
+                ########################### START OF MICROSOFT CODE ########################### 
+                # @st.cache(hash_funcs={transformers.models.gpt2.tokenization_gpt2_fast.GPT2TokenizerFast: hash}, suppress_st_warning=True)
+                # def load_data():    
+                #     #model_file = open(data_path + model_name, 'rb')
+                #     #loaded_model = base64.b64decode(pickle.load(open(data_path + model_name, 'rb')))
+                #     #loaded_model = pickle.loads(base64.b64decode(model_file, "base64"))
+                #     #loaded_model = load_model(data_path + model_name)
+                #     tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
+                #     model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+                #     #model = loaded_model
+                #     return tokenizer, model
+
+                # tokenizer, model = load_data()
+
+                # st.markdown('Welcome to Chatbot Service! Let me know how can I help you')
+                # input = st.text_input('User:')
+                # inputadd = st.text_input('Other Details:')
+
+                # if 'count' not in st.session_state or st.session_state.count == 6:
+                #     st.session_state.count = 0 
+                #     st.session_state.chat_history_ids = None
+                #     st.session_state.old_response = ''
+                # else:
+                #     st.session_state.count += 1
+
+                # new_user_input_ids = tokenizer.encode(input + tokenizer.eos_token, return_tensors='pt')
+
+                # bot_input_ids = torch.cat([st.session_state.chat_history_ids, new_user_input_ids], dim=-1) if st.session_state.count > 1 else new_user_input_ids
+
+                # st.session_state.chat_history_ids = model.generate(bot_input_ids, max_length=5000, pad_token_id=tokenizer.eos_token_id)
+
+                # response = tokenizer.decode(st.session_state.chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
+
+                # if st.session_state.old_response == response:
+                #     bot_input_ids = new_user_input_ids
+ 
+                # st.session_state.chat_history_ids = model.generate(bot_input_ids, max_length=5000, pad_token_id=tokenizer.eos_token_id)
+                # response = tokenizer.decode(st.session_state.chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
+
+                # st.write(f'Chatbot: {response}')
+
+                # st.session_state.old_response = response
+                ########################### END OF MICROSOFT CODE ########################### 
 
         
 
