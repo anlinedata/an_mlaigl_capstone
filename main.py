@@ -99,7 +99,7 @@ with body:
                 #     for file in file_paths:
                 #         zip_file.write(file)
 
-                zip_buffer = model_name
+                zip_buffer = 'nlpmodel.zip'
                 #output_model = pickle.dumps(model)
                 #b64 = base64.b64encode(output_model).decode()
                 #href = f'<a href="data:file/output_model;base64,{b64}" download="nlpmodel.pkl">Process and Download Trained Model .pkl File</a> (save as .pkl)'
