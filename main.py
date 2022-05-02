@@ -104,7 +104,9 @@ with body:
                 #b64 = base64.b64encode(output_model).decode()
                 #href = f'<a href="data:file/output_model;base64,{b64}" download="nlpmodel.pkl">Process and Download Trained Model .pkl File</a> (save as .pkl)'
                 #st.markdown(href, unsafe_allow_html=True)
-                st.download_button("Download Trained Model .zip File", file_name="nlpmodel.zip")
+                with open('nlpmodel.zip', 'rb') as zip_file:
+                    #zip_buffer = zip_file.read()
+                    st.download_button("Download Trained Model .zip File", data = zip_file, file_name="nlpmodel.zip", mime="application/zip")
         
         st.button('Train and Download Model', on_click=processModel) 
     with col3:
