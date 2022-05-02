@@ -13,7 +13,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # from zipfile import ZipFile
 # import io
-from keras.models import load_model
+#from keras.models import load_model
 
 import nltk
 #nltk.download('all')
@@ -154,12 +154,12 @@ with body:
                     clean_review = text_cleaning(review)
                 
                     # load the model and make prediction
-                    model = load_model(data_path + model_name)
+                    #model = load_model(data_path + model_name)
                 
                     # make prection
                     other = [ 0,  3,  1,  1,  1, 16]
-                    result = model.predict([clean_review, other])
-                
+                    #result = model.predict([clean_review, other])
+                    result = 'test'
                     # check probabilities
                     pred = np.argmax(result[0])
                     potpred = np.argmax(result[1])
