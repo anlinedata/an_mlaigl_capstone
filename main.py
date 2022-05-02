@@ -99,12 +99,12 @@ with body:
                 #     for file in file_paths:
                 #         zip_file.write(file)
 
-                zip_buffer = 'nlpmodel.zip'
+                #zip_buffer = 'nlpmodel.zip'
                 #output_model = pickle.dumps(model)
                 #b64 = base64.b64encode(output_model).decode()
                 #href = f'<a href="data:file/output_model;base64,{b64}" download="nlpmodel.pkl">Process and Download Trained Model .pkl File</a> (save as .pkl)'
                 #st.markdown(href, unsafe_allow_html=True)
-                st.download_button("Download Trained Model .zip File", zip_buffer, "nlpmodel.zip")
+                st.download_button("Download Trained Model .zip File", file_name="nlpmodel.zip")
         
         st.button('Train and Download Model', on_click=processModel) 
     with col3:
@@ -161,8 +161,12 @@ with body:
                     #result = model.predict([clean_review, other])
                     result = 'test'
                     # check probabilities
-                    pred = np.argmax(result[0])
-                    potpred = np.argmax(result[1])
+
+                    pred = 'TEST2'
+                    potpred = 'TEST3'
+
+                    # pred = np.argmax(result[0])
+                    # potpred = np.argmax(result[1])
                     return pred, potpred
 
                 #submit = st.button(label="Make Prediction")
