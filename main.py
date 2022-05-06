@@ -13,7 +13,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # from zipfile import ZipFile
 # import io
-#from keras.models import load_model
+from keras.models import load_model
 
 import nltk
 #nltk.download('all')
