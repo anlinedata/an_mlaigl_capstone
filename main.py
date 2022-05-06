@@ -118,7 +118,7 @@ with body:
                 #form = st.form(key="my_form")
                 st.markdown('Welcome to Chatbot Service! Let me know how can I help you')
                 input = st.text_input('User:')
-                inputadd = st.text_input('Other Details:')
+                # inputadd = st.text_input('Other Details:')
 
                 stop_words = stopwords.words("english")
                 @st.cache
@@ -153,31 +153,30 @@ with body:
                 def make_prediction(review, other):
  
                     # clearn the data
-                    clean_review = text_cleaning(review)
+                    clean_review = np.asarray([text_cleaning(review)])
                 
                     # load the model and make prediction
                     #model = load_model(data_path + model_name)
                 
                     # make prection
-                    other = [ 0,  3,  1,  1,  1, 16]
-                    #result = model.predict([clean_review, other])
-                    result = 'test'
+                    other1 = [ 0,  0,  0,  0,  0, 0]
+                    other2 = np.asarray(([other1])).astype(np.float32)
+                    # st.write(f'Array - {other2}')
+                    # st.write(f'Array - {clean_review}')
+                    result = model.predict([clean_review, other2])
+                    
                     # check probabilities
-
-                    pred = 'TEST2'
-                    potpred = 'TEST3'
-
-                    # pred = np.argmax(result[0])
-                    # potpred = np.argmax(result[1])
+                    pred = np.argmax(result[0]) + 1
+                    potpred = np.argmax(result[1]) + 1
                     return pred, potpred
 
                 #submit = st.button(label="Make Prediction")
 
-                if input and inputadd:
-                    # pred, potpred = make_prediction(input, 0)
+                if input: # and inputadd:
+                    pred, potpred = make_prediction(input, 0)
                     # st.write(f'Chatbot: {pred}')
-                    pred = 'TEST2'
-                    potpred = 'TEST3'
+                    #pred = 'TEST2'
+                    #potpred = 'TEST3'
                     st.write(f'Chatbot: Predicted Accident Level - {pred} | Predicted Potential Accident Level - {potpred}')
 
                 ########################### START OF MICROSOFT CODE ########################### 
