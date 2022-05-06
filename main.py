@@ -156,7 +156,7 @@ with body:
                     clean_review = np.asarray([text_cleaning(review)])
                 
                     # load the model and make prediction
-                    #model = load_model(data_path + model_name)
+                    model = load_model(data_path + model_name)
                 
                     # make prection
                     other1 = [ 0,  0,  0,  0,  0, 0]
