@@ -11,3 +11,4 @@ tensorflow
 nlpaug
 torch
 transformers
+keras.models
