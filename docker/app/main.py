@@ -18,6 +18,9 @@ from keras.models import load_model
 
 import nltk
 #nltk.download('all')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+nltk.download('omw-1.4') 
 
 from string import punctuation
 from nltk.corpus import stopwords
